@@ -20,9 +20,9 @@ public class Pathing : MonoBehaviour
             waypoints[i] = pathHolder.GetChild(i).position;
         }
         transform.position = waypoints[0];
-        currentCoroutine = StartCoroutine(FollowPath(waypoints));
+        currentCoroutine = StartCoroutine("FollowPath", waypoints);
     }
-    IEnumerator FollowPath(Vector3[] waypoints)
+    public IEnumerator FollowPath(Vector3[] waypoints)
     {
         transform.position = waypoints[0];
 

@@ -11,7 +11,7 @@ public class DasterLookingPlayer : MonoBehaviour
     public Animator transition;
     public float delayUponIdle = 0.5f;
     float speed;
-    bool spottedByDaster = false;
+    bool isSpottedByDaster = false;
 
     // Start is called before the first frame update
     void Start()
@@ -23,17 +23,24 @@ public class DasterLookingPlayer : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        Coroutine dasterChase = null;
-        if (!spottedByDaster && player.transform.position.x >= transform.position.x)
+
+        if (!isSpottedByDaster && player.transform.position.x >= transform.position.x)
         {
-            spottedByDaster = true;
-            notifyAnimator();
-            player.canMove = false;
-            questionMark.enabled = true;
-            print("Starting coroutine");
-            speed = speed * 2;
-            dasterChase = StartCoroutine("MoveTowardsPlayer");
+            spottedByDaster();
         }
+
+    }
+    void spottedByDaster()
+    {
+        Pathing pathing = GameObject.FindObjectOfType(typeof(Pathing)) as Pathing;
+        pathing.StopAllCoroutines();
+        isSpottedByDaster = true;
+        notifyAnimator();
+        player.canMove = false;
+        questionMark.enabled = true;
+
+        speed = speed * 2;
+        StartCoroutine("MoveTowardsPlayer");
 
     }
 
@@ -44,7 +51,6 @@ public class DasterLookingPlayer : MonoBehaviour
     }
     public IEnumerator MoveTowardsPlayer()
     {
-        print("In coroutine");
         if (transform.position.y > player.transform.position.y)
         {
             animator.SetBool("MovingUp", false);
@@ -57,7 +63,6 @@ public class DasterLookingPlayer : MonoBehaviour
         while (Vector3.Distance(transform.position, player.transform.position) > ((GetComponent<BoxCollider2D>().size.y) / 2) + player.GetComponent<BoxCollider2D>().size.y / 2 + 0.05)
         {
             transform.position = Vector3.MoveTowards(transform.position, player.transform.position, speed * Time.deltaTime);
-            print(transform.position);
             yield return null;
         }
         animator.SetBool("isMoving", false);
