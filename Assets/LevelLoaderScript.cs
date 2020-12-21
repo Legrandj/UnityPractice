@@ -1,4 +1,4 @@
-﻿using System.Collections;
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.SceneManagement;
@@ -22,12 +22,11 @@ public class LevelLoaderScript : MonoBehaviour
     }
     public IEnumerator LoadLevelCoroutine(int index)
     {
-        print("Ienumerator");
+
 
         yield return new WaitForSeconds(transitionTime);
-        print("after waitforseconds");
+
         SceneManager.LoadScene(index);
-        StopCoroutine("LoadLevelCoroutine");
 
     }
 }
